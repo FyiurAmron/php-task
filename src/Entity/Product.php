@@ -20,6 +20,13 @@ use Recruitment\Entity\Exception\InvalidUnitPriceException;
  */
 class Product
 {
+    public const ALLOWED_TAX_PERCENTAGES = [
+        0,
+        5,
+        8,
+        23,
+    ];
+
     /** @var null|string */
     private $name;
     /** @var int|null */
@@ -28,6 +35,8 @@ class Product
     private $minimumQuantity;
     /** @var int|null */
     private $unitPrice;
+    /** @var int|null */
+    private $taxPercent;
 
     /**
      * Product constructor.
@@ -36,17 +45,20 @@ class Product
      * @param int|null $id
      * @param int|null $minimumQuantity
      * @param int|null $unitPrice
+     * @param int|null $taxPercent
      */
     public function __construct(
         ?string $name = null,
         ?int $id = null,
         ?int $minimumQuantity = 1,
-        ?int $unitPrice = null
+        ?int $unitPrice = null,
+        ?int $taxPercent = null
     ) {
         $this->name = $name;
         $this->id = $id;
         $this->minimumQuantity = $minimumQuantity;
         $this->unitPrice = $unitPrice;
+        $this->taxPercent = $taxPercent;
     }
 
     /**
@@ -79,6 +91,14 @@ class Product
     public function getUnitPrice(): ?int
     {
         return $this->unitPrice;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getTaxPercent(): ?int
+    {
+        return $this->taxPercent;
     }
 
     /**
@@ -138,6 +158,22 @@ class Product
         }
 
         $this->unitPrice = $unitPrice;
+
+        return $this;
+    }
+
+    /**
+     * @param int|null $taxPercent
+     *
+     * @return Product
+     */
+    public function setTaxPercent(?int $taxPercent): Product
+    {
+        if (!\in_array($taxPercent, self::ALLOWED_TAX_PERCENTAGES, true)) {
+            throw new \UnexpectedValueException('tax percentage: ' . $taxPercent . ' is not allowed');
+        }
+
+        $this->taxPercent = $taxPercent;
 
         return $this;
     }

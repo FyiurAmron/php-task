@@ -49,12 +49,28 @@ class Order
         return $sum;
     }
 
+    /**
+     * @return int
+     */
+    public function getTotalPriceGross(): int
+    {
+        $sum = 0;
+        foreach ($this->items as $item) {
+            $sum += $item->getTotalPriceGross();
+        }
+        return $sum;
+    }
+
     private static function getItemToArray(Item $item): array
     {
+        $product = $item->getProduct();
+
         return [
-            'id' => $item->getProduct()->getId(),
+            'id' => $product->getId(),
             'quantity' => $item->getQuantity(),
-            'total_price' => $item->getTotalPrice()
+            'total_price' => $item->getTotalPrice(),
+            'tax_percent' => $product->getTaxPercent(),
+            'total_price_gross' => $item->getTotalPriceGross(),
         ];
     }
 
@@ -74,6 +90,7 @@ class Order
             'id' => $this->id,
             'items' => $this->getItemsToArray(),
             'total_price' => $this->getTotalPrice(),
+            'total_price_gross' => $this->getTotalPriceGross(),
         ];
     }
 }

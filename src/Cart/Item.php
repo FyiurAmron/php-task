@@ -89,4 +89,20 @@ class Item
     {
         return $this->quantity * $this->product->getUnitPrice();
     }
+
+    /**
+     * w j. ang. nie ma słowa 'brutto'
+     *
+     * prawidłowe określenia to - odpowiednio dla netto, brutto, tara - net, gross, tare
+     *
+     * @return int
+     */
+    public function getTotalPriceGross(): int
+    {
+        $product = $this->product;
+
+        return (int)\round(
+            $this->quantity * $product->getUnitPrice() * ($product->getTaxPercent() + 100) / 100
+        );
+    }
 }

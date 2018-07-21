@@ -46,4 +46,17 @@ class ItemTest extends TestCase
         $item = new Item($product, 10);
         $item->setQuantity(9);
     }
+
+    /**
+     * @test
+     */
+    public function itCalculatesPriceGrossAndRoundsItCorrectly(): void
+    {
+        $product = (new Product())
+            ->setTaxPercent(23)
+            ->setUnitPrice(7320);
+
+        $item = new Item($product, 1);
+        $this->assertEquals(9004, $item->getTotalPriceGross());
+    }
 }

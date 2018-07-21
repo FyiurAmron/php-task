@@ -28,4 +28,14 @@ class ProductTest extends TestCase
         $product = new Product();
         $product->setMinimumQuantity(0);
     }
+
+    /**
+     * @test
+     * @expectedException \UnexpectedValueException
+     */
+    public function itThrowsExceptionForInvalidTaxPercentage(): void
+    {
+        $product = new Product();
+        $product->setTaxPercent(22);
+    }
 }
