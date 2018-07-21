@@ -38,4 +38,9 @@ class ProductTest extends TestCase
         $product = new Product();
         $product->setTaxPercent(22);
     }
+
+    public static function buildTestProduct(int $id, int $price, int $taxPercent = 0): Product
+    {
+        return (new Product())->setId($id)->setUnitPrice($price)->setTaxPercent($taxPercent);
+    }
 }
